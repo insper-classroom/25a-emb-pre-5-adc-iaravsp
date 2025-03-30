@@ -26,34 +26,42 @@ void data_task(void *p)
     }
 }
 
-    void process_task(void *p)
-    {
-        int dados[5] = {0};
-        int data = 0;
-        int soma = 0;
-        int media = 0;
-        int i = 0;
-        while (true)
-        {
-            if (xQueueReceive(xQueueData, &data, 100))
-            {
-                // implementar filtro aqui!
-                soma -= dados[i];
-                dados[i] = data;
-                soma += data;
-                i++;
-                if (i == 5)
-                {
-                    media = soma/5;
-                    printf("%d\n", media);
-                    i=0;
-                }
+void process_task(void *p)
+{
+    int dados[5] = {0}; 
+    int posicao = 0;          
+    int cheio = 0;      
+    int data = 0; 
 
-                // deixar esse delay!
-                vTaskDelay(pdMS_TO_TICKS(50));
+    while (true)
+    {
+        if (xQueueReceive(xQueueData, &data, 100))
+        {
+            dados[posicao] = data;
+            posicao++;
+            
+            if (posicao == 5)
+            {
+                posicao = 0;
+                cheio = 1;
             }
+
+            if (cheio)
+            {
+                int soma = 0;
+                for (int i = 0; i < 5; i++)
+                {
+                    soma += dados[i];
+                }
+                int media = soma / 5;
+
+                printf("%d\n", media);
+            }
+
+            vTaskDelay(pdMS_TO_TICKS(50));
         }
     }
+}
 
 int main()
 {
