@@ -17,12 +17,16 @@ void adc_1_task(void *p) {
     const float conversion_factor = 3.3f / (1 << 12);
 
     uint16_t result;
+    uint16_t result2;
     while (1) {
         adc_select_input(1); // Select ADC input 1 (GPIO27)
         result = adc_read();
         printf("voltage 1: %f V\n", result * conversion_factor);
 
         // CÓDIGO AQUI
+        adc_select_input(0); // Select ADC input 1 (GPIO27)
+        result2 = adc_read();
+        printf("voltage 2: %f V\n", result2 * conversion_factor);
 
 
 
