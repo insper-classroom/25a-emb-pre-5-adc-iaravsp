@@ -35,7 +35,12 @@ void process_task(void *p)
     {
         if (xQueueReceive(xQueueData, &data, 100))
         {
-            if (numeros == 5)
+            if (numeros < 5)
+            {
+                dados[numeros] = data;
+                numeros++;
+            }
+            else
             {
                 for (int i = 0; i < 4; i++)
                 {
@@ -43,21 +48,18 @@ void process_task(void *p)
                 }
                 dados[4] = data;
             }
-            else
-            {
-                dados[numeros] = data;
-                numeros++;
-            }
-            if (numeros == 5)
+
+            if (numeros > 0)
             {
                 int soma = 0;
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < numeros; i++)
                 {
                     soma += dados[i];
                 }
-                int media = soma / 5;
+                int media = soma / numeros;
                 printf("%d\n", media);
             }
+
             vTaskDelay(pdMS_TO_TICKS(50));
         }
     }
