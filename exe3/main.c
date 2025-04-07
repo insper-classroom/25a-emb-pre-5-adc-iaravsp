@@ -56,7 +56,7 @@ void process_task(void *p)
                 {
                     soma += dados[i];
                 }
-                int media = soma / numeros;
+                int media = soma / 5;
                 printf("%d\n", media);
             }
 
